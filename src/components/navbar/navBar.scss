@@ -10,10 +10,13 @@
     background-color: white;
     box-shadow: 1px 1px 10px #c6c6c6;
     position: relative;
-    height: 50px;
+    // height: 50px;
     z-index: 5;
+    padding-top: 5px;
+    padding-bottom: 60px;
 
     .logo {
+
         display: inline;
         line-height: 50px;
         color: #F52938;
@@ -26,10 +29,10 @@
     .location {
         display: inline-block;
         border: 2px solid #B1B5B9;
-        padding-left: 5px;
-        margin-left: 60px;
-        padding-top: 8px;
-        height: 40px;
+        // padding-left: 5px;
+        // margin-left: 60px;
+        // padding-top: 8px;
+        // height: 40px;
         /* top: 0; */
         
         .search{
@@ -71,7 +74,8 @@
     .d1,
     .d2,
     .d3 {
-        line-height: 50px;
+        // line-height: 50px;
+        margin-top: 10px;
         position: absolute;
         top:0px;
         font-size: 12px;

@@ -305,8 +305,8 @@ return (
                             <div>Seller</div>
                         </div>
 
-                        <div className={`searchSection ${sticky ? 'stickySearch' : ''}`} >
-                        <input type="text" className="form-control" onChange={onQueryChange} placeholder="Search for Anything..." />
+                        <div className={`searchSection pt-2 ${sticky ? 'stickySearch' : ''}`} >
+                        <input type="text" className="form-control " onChange={onQueryChange} placeholder="Search for Anything..." />
                             <button className="btn" onClick={handleSearch}><SearchOutlinedIcon className="icon"/>Search</button>
                         </div>
 
