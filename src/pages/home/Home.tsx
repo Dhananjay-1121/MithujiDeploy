@@ -305,8 +305,8 @@ return (
                             <div>Seller</div>
                         </div>
 
-                        <div className={`searchSection ${sticky ? 'stickySearch' : ''}`} >
-                        <input type="text" className="form-control" onChange={onQueryChange} placeholder="Search for Anything..." />
+                        <div className={`searchSection pt-2 ${sticky ? 'stickySearch' : ''}`} >
+                        <input type="text" className="form-control " onChange={onQueryChange} placeholder="Search for Anything..." />
                             <button className="btn" onClick={handleSearch}><SearchOutlinedIcon className="icon"/>Search</button>
                         </div>
 
@@ -396,7 +396,7 @@ return (
                         <div className="flex flex-col  pt-4 px-3 ">
                             <div className="text-black text-2xl font-bold">New Product Category</div>
                             <div className="px-3 w-fit mt-4 text-white font-semibold bg-[rgb(63,164,116)] py-2 rounded-md">Explore This</div>
-                            <img className="" src="https://picsum.photos/200" alt="image" />
+                            <img className="pt-16 pl-16" src="https://picsum.photos/200" alt="image" />
                         </div>
                     </div>
                     <div className="d2">
@@ -415,7 +415,7 @@ return (
                     <div className="flex flex-col  pt-4 px-3 ">
                             <div className="text-black text-2xl font-bold">New Product Category</div>
                             <div className="px-3 w-fit mt-4 text-white font-semibold bg-[rgb(63,122,164)] py-2 rounded-md">Explore This</div>
-                            <img className="" src="https://picsum.photos/200" alt="image" />
+                            <img className="pt-16 pl-16" src="https://picsum.photos/200" alt="image" />
                         </div>
                     </div>
                     <div className="d2">
@@ -434,7 +434,7 @@ return (
                     <div className="flex flex-col  pt-4 px-3 ">
                             <div className="text-black text-2xl font-bold">New Product Category</div>
                             <div className="px-3 w-fit mt-4 text-white font-semibold bg-[rgb(96,64,164)] py-2 rounded-md">Explore This</div>
-                            <img className="" src="https://picsum.photos/200" alt="image" />
+                            <img className="pt-16 pl-16" src="https://picsum.photos/200" alt="image" />
                         </div>
                     </div>
                     <div className="d2">
