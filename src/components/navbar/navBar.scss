@@ -12,8 +12,8 @@
     position: relative;
     // height: 50px;
     z-index: 5;
-    padding-top: 5px;
-    padding-bottom: 60px;
+    padding-top: 15px;
+    padding-bottom: 67px;
 
     .logo {
 
@@ -29,6 +29,7 @@
     .location {
         display: inline-block;
         border: 2px solid #B1B5B9;
+        border-radius: 5px;
         // padding-left: 5px;
         // margin-left: 60px;
         // padding-top: 8px;
@@ -49,6 +50,7 @@
             // position: relative;
             width: 20px;
             // top: 0;
+            
             background-color: white;
         }
 
@@ -75,38 +77,25 @@
     .d2,
     .d3 {
         // line-height: 50px;
-        margin-top: 10px;
+        font-size: larger;
+        margin-top: 20px;
         position: absolute;
         top:0px;
-        font-size: 12px;
+        font-size: 20px;
         color: #555F68;
         cursor: pointer;
-        padding-top: 5px;
+        // padding-top: 20px;
         display: flex;
         align-items: center;
         flex-direction: column;
-        line-height: 17px;
+        // line-height: 17px;
 
         .icon{
-            font-size: 17px;
-            position: relative;
-            color: #FC6752;
+            font-size: 25px;
+            // position: relative;
+            // color: #FC6752;
         }
     }
     
-    .d1 {
-        right: 180px;
-    }
     
-    .d2 {
-        right: 100px;
-    }
-    
-    .d3 {
-        right: 50px;
-
-        .text{
-            display: inline;
-        }
-    }
 }
