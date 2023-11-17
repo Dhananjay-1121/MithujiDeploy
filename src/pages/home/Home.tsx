@@ -1,189 +1,196 @@
-import { useEffect, useState } from "react"
-import "./home.scss"
-import { Button } from "@mui/material"
-import EastIcon from '@mui/icons-material/East';
+import { useEffect, useState } from "react";
+import "./home.scss";
+import { Button } from "@mui/material";
+import EastIcon from "@mui/icons-material/East";
 import Footer from "../../components/footer/Footer";
 import ProductCard from "../../components/product-card/ProductCard";
 import Navbar from "../../components/navbar/Navbar";
-import { BASEURL } from "../../utils/constants"
-import { category_products } from "../../App"
+import { BASEURL } from "../../utils/constants";
+import { category_products } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { search_products } from "../../App";
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Home = () => {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
-    
-    const base_url = category_products + "/";
+  const base_url = category_products + "/";
 
-    const navigation = (categoryName: string, seq : any) => {
-        navigate(categoryName + base_url, { state: {seq:  seq} });
-      };
+  const navigation = (categoryName: string, seq: any) => {
+    navigate(categoryName + base_url, { state: { seq: seq } });
+  };
 
-      const [sticky, setSticky] = useState(false);
-      const [locateShow, setLocateShow] = useState(false);
-    
-    const [array, setArray] = useState([
-        {image: '', name: ''}
-    ])
+  const [sticky, setSticky] = useState(false);
+  const [locateShow, setLocateShow] = useState(false);
 
-    interface Category {
-        category_name: string;
-        category_seq: number;
-        product_one_name: string;
-        product_two_name: string;
-        product_three_name: string;
-      }      
-    
-      const [data, setData] = useState<Category[]>([]);
+  const [array, setArray] = useState([{ image: "", name: "" }]);
 
-    const [query, setQuery] = useState("");
+  interface Category {
+    category_name: string;
+    category_seq: number;
+    product_one_name: string;
+    product_two_name: string;
+    product_three_name: string;
+  }
 
-    const [userData, setUserData] = useState({});
+  const [data, setData] = useState<Category[]>([]);
 
-    useEffect(() => {
-        const handleScroll = () => {
-          if (window.scrollY > 300) {
-            setSticky(true);
-            setLocateShow(true)
+  const [query, setQuery] = useState("");
+
+  const [userData, setUserData] = useState({});
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setSticky(true);
+        setLocateShow(true);
+      } else {
+        setSticky(false);
+        setLocateShow(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    // console.log(setArray);
+
+    (async () => {
+      try {
+        // console.log("response sending...");
+        // Use fetch to make the post request with the url and the data
+        const response = await fetch(`${BASEURL}/category/all`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+          },
+        });
+
+        // console.log(response);
+        const data = await response.json();
+
+        if (response.status === 200) {
+          console.log(data.response);
+          setData(data.response);
         } else {
-            setSticky(false);
-            setLocateShow(false)
-          }
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-      }, []);
-
-    useEffect(() => {
-        // console.log(setArray);
-
-        (async () => {     
-            try {
-                // console.log("response sending...");
-                // Use fetch to make the post request with the url and the data
-                const response = await fetch(`${BASEURL}/category/all`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${localStorage.getItem("auth_token")}`},
-                });
-    
-                // console.log(response);
-                const data = await response.json();
-
-    
-                if (response.status === 200) {
-                    console.log(data.response);
-                    setData(data.response)
-                } else {
-                    alert(data.response);
-                }
-            } catch (err) {
-                console.log("suggestion errr", err);
-            }
-          })();
-        
-        
-          (async () => {     
-            try {
-                // console.log("response sending...");
-                // Use fetch to make the post request with the url and the data
-                const response = await fetch(`${BASEURL}/sponsored`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "text",
-                        "Authorization": `Bearer ${localStorage.getItem("auth_token")}`
-                    },
-                });
-    
-                // console.log(response);
-                const data = await response.json();
-
-    
-                if (response.status === 200) {
-                    // console.log(data.response);
-                    setArray(data.response)
-                } else {
-                    alert(data.response);
-                }
-            } catch (err) {
-                console.log("Sponsored data errr", err);
-            }
-          })();
-    }, []);
-
-    const hanldeChange = (e: any) => {
-        setUserData({ ...userData, [e.target.name]: e.target.value });
-    }
-
-    const onQueryChange = (e: any) => {
-        setQuery(e.target.value);
-    }
-
-    const submit = async () => {
-        try {
-            console.log("response sending...");
-            console.log(userData);
-            // Use fetch to make the post request with the url and the data
-            const response = await fetch(`${BASEURL}/suggestion/create`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("auth_token")}`
-                },
-                body: JSON.stringify(userData), // Convert the userData object to a JSON string
-            });
-
-            console.log(response);
-            const data = await response.json();
-
-            console.log(data);
-
-            if (response.status === 201) {
-                console.log(data);
-                alert("Suggestion Successfully");
-            } else {
-                alert(data.response);
-            }
-        } catch (err) {
-            console.log("suggestion errr", err);
+          toast(data.response);
         }
-    }
+      } catch (err) {
+        console.log("suggestion errr", err);
+      }
+    })();
 
-    const handleSearch = async () => {
-        try {
-            console.log("response sending...");
-            // Use fetch to make the post request with the url and the data
-            const response = await fetch(`${BASEURL}/product/search?q=${query}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("auth_token")}`
-                },
-                // body: JSON.stringify(userData), // Convert the userData object to a JSON string
-            });
+    (async () => {
+      try {
+        // console.log("response sending...");
+        // Use fetch to make the post request with the url and the data
+        const response = await fetch(`${BASEURL}/sponsored`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "text",
+            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+          },
+        });
 
-            console.log(response);
-            const data = await response.json();
+        // console.log(response);
+        const data = await response.json();
 
-            console.log(data);
-
-            if (response.status === 200) {
-                console.log(data);
-                navigate(search_products, {state: {array: data.response, searchedItem: query}})
-                // alert("Suggestion Successfully");
-            } else {
-                alert(data.response);
-            }
-        } catch (err) {
-            console.log("suggestion errr", err);
+        if (response.status === 200) {
+          // console.log(data.response);
+          setArray(data.response);
+        } else {
+          toast(data.response);
         }
+      } catch (err) {
+        console.log("Sponsored data errr", err);
+      }
+    })();
+  }, []);
+
+  const hanldeChange = (e: any) => {
+    setUserData({ ...userData, [e.target.name]: e.target.value });
+  };
+
+  const onQueryChange = (e: any) => {
+    setQuery(e.target.value);
+  };
+
+  const submit = async () => {
+    try {
+      console.log("response sending...");
+      console.log(userData);
+      // Use fetch to make the post request with the url and the data
+      const response = await fetch(`${BASEURL}/suggestion/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+        },
+        body: JSON.stringify(userData), // Convert the userData object to a JSON string
+      });
+
+      console.log(response);
+      const data = await response.json();
+
+      console.log(data);
+
+      if (response.status === 201) {
+        console.log(data);
+        toast.success("Suggestion Successfully", {
+          position: "top-center",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        toast(data.response);
+      }
+    } catch (err) {
+      console.log("suggestion errr", err);
     }
+  };
 
-      const renderCategory = () => {
+  const handleSearch = async () => {
+    try {
+      console.log("response sending...");
+      // Use fetch to make the post request with the url and the data
+      const response = await fetch(`${BASEURL}/product/search?q=${query}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+        },
+        // body: JSON.stringify(userData), // Convert the userData object to a JSON string
+      });
 
+      console.log(response);
+      const data = await response.json();
+
+      console.log(data);
+
+      if (response.status === 200) {
+        console.log(data);
+        navigate(search_products, {
+          state: { array: data.response, searchedItem: query },
+        });
+        // alert("Suggestion Successfully");
+      } else {
+        toast(data.response);
+      }
+    } catch (err) {
+      console.log("suggestion errr", err);
+    }
+  };
+
+  const renderCategory = () => {
     //     const categories = [
     //     {
     //       name: "Electronic &<br /> Electrical",
@@ -262,67 +269,87 @@ const Home = () => {
 
     //   console.log(data);
     //   console.log(data[0].categories[0]);
-const categoriesname = [""];
-// console.log(categoriesname);
-// console.log(categories[0].subCategories);
-// console.log(array);
-return (
-    <>
-            {data.map(category => (
-              <li className="category pt-3 mt-1">
-                <a dangerouslySetInnerHTML={{ __html: category.category_name }} onClick={() => navigation(category.category_name, category.category_seq)}></a>
-                <ul className="dropdown">
-                  {categoriesname.map(subCategory => (
-                    <li className="sub-category">
-                      <a className="" href="#">{subCategory}</a>
-                      <ul className="tab">
-                        {/* {category.categories.map(item => ( */}
-                          <p className="sub-category-item"><a href="#">{category.product_one_name}</a></p>
-                          <p className="sub-category-item"><a href="#">{category.product_two_name}</a></p>
-                          <p className="sub-category-item"><a href="#">{category.product_three_name}</a></p>
-                        {/* ))} */}
-                      </ul>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </>
-        );
-      };      
-
+    const categoriesname = [""];
+    // console.log(categoriesname);
+    // console.log(categories[0].subCategories);
+    // console.log(array);
     return (
-        <>
-            <div className="home">
+      <>
+        {data.map((category) => (
+          <li className="category pt-3 mt-1">
+            <a
+              dangerouslySetInnerHTML={{ __html: category.category_name }}
+              onClick={() =>
+                navigation(category.category_name, category.category_seq)
+              }
+            ></a>
+            <ul className="dropdown">
+              {categoriesname.map((subCategory) => (
+                <li className="sub-category">
+                  <a className="" href="#">
+                    {subCategory}
+                  </a>
+                  <ul className="tab">
+                    {/* {category.categories.map(item => ( */}
+                    <p className="sub-category-item">
+                      <a href="#">{category.product_one_name}</a>
+                    </p>
+                    <p className="sub-category-item">
+                      <a href="#">{category.product_two_name}</a>
+                    </p>
+                    <p className="sub-category-item">
+                      <a href="#">{category.product_three_name}</a>
+                    </p>
+                    {/* ))} */}
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </>
+    );
+  };
 
-                <Navbar sticky={sticky} locateShow={locateShow} />
+  return (
+    <>
+      <div className="home">
+        <Navbar sticky={sticky} locateShow={locateShow} />
 
-                <div className="topContainer">
-                    <div className="topInner">
-                        <div className="options">
-                            <div>Product</div>
-                            <div>Category</div>
-                            <div>Seller</div>
-                        </div>
+        <div className="topContainer">
+          <div className="topInner">
+            <div className="options">
+              <div>Product</div>
+              <div>Category</div>
+              <div>Seller</div>
+            </div>
 
-                        <div className={`searchSection pt-5 ${sticky ? 'stickySearch' : ''}`} >
-                        <input type="text" className="form-control border-2" onChange={onQueryChange} placeholder="Search for Anything..." />
-                            <button className="btn" onClick={handleSearch}><SearchOutlinedIcon className="icon"/>Search</button>
-                        </div>
+            <div
+              className={`searchSection pt-3 ${sticky ? "stickySearch" : ""}`}
+            >
+              <input
+                type="text"
+                className="form-control border-2"
+                onChange={onQueryChange}
+                placeholder="Search for Anything..."
+              />
+              <button className="btn" onClick={handleSearch}>
+                <SearchOutlinedIcon className="icon" />
+                Search
+              </button>
+            </div>
 
-                        <div className="flex justify-center" >
-                           
-                                <div className="selectCon">All India</div>
-                            
-                        </div>
-                    </div>
-                </div>
+            <div className="flex justify-center">
+              <div className="selectCon">All India</div>
+            </div>
+          </div>
+        </div>
 
-                <div className="contentSection">
-                    <ul>
-                        {renderCategory()}
-                        <li className="">
-                            {/* <ul className="dropdown">
+        <div className="contentSection">
+          <ul>
+            {renderCategory()}
+            <li className="">
+              {/* <ul className="dropdown">
                                 <li className="sub-category"><a href="#">Sub-1</a>
                                     <ul className="tab">
                                         <p className="sub-category-item"><a href="#">Sub-1</a></p>
@@ -351,109 +378,183 @@ return (
                                     </ul>
                                 </li>
                             </ul> */}
-                        </li>
-                    </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div className="midContainer">
+          <div className="left">
+            <section className="font-bold text-3xl">Sponsored Products</section>
+            {array.map((val, index) => {
+              return (
+                <div
+                  className="boxCon"
+                  key={index}
+                  onClick={() => console.log(val)}
+                >
+                  <img
+                    src={`${BASEURL}/content/get/${val.image}`}
+                    className="box flex justify-center"
+                  ></img>
+                  <span className="flex justify-center font-semibold">
+                    {val.name}
+                  </span>
                 </div>
+              );
+            })}
+          </div>
 
-                <div className="midContainer">
-
-                    <div className="left">
-                        <section className="font-bold text-3xl">Sponsored Products</section>
-                        {array.map((val, index) => {
-                            return (
-                                <div className="boxCon" key={index} onClick={() => console.log(val)}>
-                                    <img src={`${BASEURL}/content/get/${val.image}`} className="box flex justify-center"></img>
-                                    <span className="flex justify-center font-semibold">{val.name}</span>
-                                </div>
-                            );
-                        })}
-
-                    </div>
-
-                    <div className="right">
-                        <div className="innerDiv">
-                            <section>Tell Us What <br /> You Need</section>
-                            <form>
-                                <div className="form-group">
-                                    <input type="text" className="form-control" placeholder="Enter Product Name" name="product_name" onChange={hanldeChange} />
-                                </div>
-                                <div className="form-group">
-                                    <input type="text" className="form-control" placeholder="Enter your mobile number" name="phone_number" onChange={hanldeChange} />
-                                </div>
-                                <div className="form-group">
-                                    <input type="text" className="form-control" placeholder="Enter your name" name="name" onChange={hanldeChange} />
-                                </div>
-                                <div className="form-group">
-                                    <Button className="bt" variant="contained" onClick={() => submit()}>Submit</Button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+          <div className="right">
+            <div className="innerDiv">
+              <section>
+                Tell Us What <br /> You Need
+              </section>
+              <form>
+                <div className="form-group">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Enter Product Name"
+                    name="product_name"
+                    onChange={hanldeChange}
+                  />
                 </div>
-
-                <div className="productCategoryCon">
-                    <div className="c1">
-                        <div className="flex flex-col  pt-4 px-3 ">
-                            <div className="text-black text-2xl font-bold">New Product Category</div>
-                            <div className="px-3 w-fit mt-4 text-white font-semibold bg-[rgb(63,164,116)] py-2 rounded-md">Explore This</div>
-                            <img className="pt-16 pl-16" src="https://picsum.photos/200" alt="image" />
-                        </div>
-                    </div>
-                    <div className="d2">
-                        <ProductCard /> 
-                        <ProductCard />
-                        <ProductCard />
-                        <ProductCard />
-                        <ProductCard />
-                    </div>
-                    <div className="d3">
-                        <section><EastIcon /> <br /> View All</section>
-                    </div>
+                <div className="form-group">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Enter your mobile number"
+                    name="phone_number"
+                    onChange={hanldeChange}
+                  />
                 </div>
-                <div className="productCategoryCon">
-                    <div className="c2">
-                    <div className="flex flex-col  pt-4 px-3 ">
-                            <div className="text-black text-2xl font-bold">New Product Category</div>
-                            <div className="px-3 w-fit mt-4 text-white font-semibold bg-[rgb(63,122,164)] py-2 rounded-md">Explore This</div>
-                            <img className="pt-16 pl-16" src="https://picsum.photos/200" alt="image" />
-                        </div>
-                    </div>
-                    <div className="d2">
-                        <ProductCard />
-                        <ProductCard />
-                        <ProductCard />
-                        <ProductCard />
-                        <ProductCard />
-                    </div>
-                    <div className="d3">
-                        <section><EastIcon /> <br /> View All</section>
-                    </div>
+                <div className="form-group">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Enter your name"
+                    name="name"
+                    onChange={hanldeChange}
+                  />
                 </div>
-                <div className="productCategoryCon">
-                    <div className="c3">
-                    <div className="flex flex-col  pt-4 px-3 ">
-                            <div className="text-black text-2xl font-bold">New Product Category</div>
-                            <div className="px-3 w-fit mt-4 text-white font-semibold bg-[rgb(96,64,164)] py-2 rounded-md">Explore This</div>
-                            <img className="pt-16 pl-16" src="https://picsum.photos/200" alt="image" />
-                        </div>
-                    </div>
-                    <div className="d2">
-                        <ProductCard />
-                        <ProductCard />
-                        <ProductCard />
-                        <ProductCard />
-                        <ProductCard />
-                    </div>
-                    <div className="d3">
-                        <section><EastIcon /> <br /> View All</section>
-                    </div>
+                <div className="form-group">
+                  <Button
+                    className="bt"
+                    variant="contained"
+                    onClick={() => submit()}
+                  >
+                    Submit
+                  </Button>
                 </div>
-
-                <Footer />
-
+              </form>
             </div>
-        </>
-    )
-}
+          </div>
+        </div>
 
-export default Home
+        <div className="productCategoryCon">
+          <div className="c1">
+            <div className="flex flex-col  pt-4 px-3 ">
+              <div className="text-black text-2xl font-bold">
+                New Product Category
+              </div>
+              <div className="px-3 w-fit mt-4 text-white font-semibold bg-[rgb(63,164,116)] py-2 rounded-md">
+                Explore This
+              </div>
+              <img
+                className="pt-16 pl-16"
+                src="https://picsum.photos/200"
+                alt="image"
+              />
+            </div>
+          </div>
+          <div className="d2">
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+          </div>
+          <div className="d3">
+            <section>
+              <EastIcon /> <br /> View All
+            </section>
+          </div>
+        </div>
+        <div className="productCategoryCon">
+          <div className="c2">
+            <div className="flex flex-col  pt-4 px-3 ">
+              <div className="text-black text-2xl font-bold">
+                New Product Category
+              </div>
+              <div className="px-3 w-fit mt-4 text-white font-semibold bg-[rgb(63,122,164)] py-2 rounded-md">
+                Explore This
+              </div>
+              <img
+                className="pt-16 pl-16"
+                src="https://picsum.photos/200"
+                alt="image"
+              />
+            </div>
+          </div>
+          <div className="d2">
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+          </div>
+          <div className="d3">
+            <section>
+              <EastIcon /> <br /> View All
+            </section>
+          </div>
+        </div>
+        <div className="productCategoryCon">
+          <div className="c3">
+            <div className="flex flex-col  pt-4 px-3 ">
+              <div className="text-black text-2xl font-bold">
+                New Product Category
+              </div>
+              <div className="px-3 w-fit mt-4 text-white font-semibold bg-[rgb(96,64,164)] py-2 rounded-md">
+                Explore This
+              </div>
+              <img
+                className="pt-16 pl-16"
+                src="https://picsum.photos/200"
+                alt="image"
+              />
+            </div>
+          </div>
+          <div className="d2">
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+          </div>
+          <div className="d3">
+            <section>
+              <EastIcon /> <br /> View All
+            </section>
+          </div>
+        </div>
+
+        <Footer />
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+      </div>
+    </>
+  );
+};
+
+export default Home;
