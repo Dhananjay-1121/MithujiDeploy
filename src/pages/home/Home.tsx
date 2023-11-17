@@ -262,19 +262,19 @@ const Home = () => {
 
     //   console.log(data);
     //   console.log(data[0].categories[0]);
-const categoriesname = ["sub cat 1"];
+const categoriesname = [""];
 // console.log(categoriesname);
 // console.log(categories[0].subCategories);
 // console.log(array);
 return (
     <>
             {data.map(category => (
-              <li className="category">
+              <li className="category pt-3 mt-1">
                 <a dangerouslySetInnerHTML={{ __html: category.category_name }} onClick={() => navigation(category.category_name, category.category_seq)}></a>
                 <ul className="dropdown">
                   {categoriesname.map(subCategory => (
                     <li className="sub-category">
-                      <a href="#">{subCategory}</a>
+                      <a className="" href="#">{subCategory}</a>
                       <ul className="tab">
                         {/* {category.categories.map(item => ( */}
                           <p className="sub-category-item"><a href="#">{category.product_one_name}</a></p>
@@ -305,7 +305,7 @@ return (
                             <div>Seller</div>
                         </div>
 
-                        <div className={`searchSection pt-3 ${sticky ? 'stickySearch' : ''}`} >
+                        <div className={`searchSection pt-5 ${sticky ? 'stickySearch' : ''}`} >
                         <input type="text" className="form-control border-2" onChange={onQueryChange} placeholder="Search for Anything..." />
                             <button className="btn" onClick={handleSearch}><SearchOutlinedIcon className="icon"/>Search</button>
                         </div>
@@ -321,7 +321,7 @@ return (
                 <div className="contentSection">
                     <ul>
                         {renderCategory()}
-                        <li className="category"><a href="/">View All<br /> Categories</a>
+                        <li className="">
                             {/* <ul className="dropdown">
                                 <li className="sub-category"><a href="#">Sub-1</a>
                                     <ul className="tab">

@@ -653,7 +653,7 @@ const CustomerProfile = () => {
 
   return (
     <>
-      <div className="profile">
+      <div className="profile pt-4">
         <Navbar />
         <div className="innerProduct">
           <div className="left">
@@ -667,7 +667,7 @@ const CustomerProfile = () => {
                   src={placeholder}
                   className="box-img"
                 ></img>
-                <span>Change Profile</span>
+                <span className="mt-2">Change Profile</span>
               </div>
               <div className="align">
                 <div className="progress-percentage">
@@ -1288,7 +1288,7 @@ const CustomerProfile = () => {
                     </div>
                   )}
                 </div>
-                <div className="form-group">
+                <div className="form-group pt-5 mt-5">
                   <button type="button" className="bt" onClick={handleSubmit}>
                     <GppGoodIcon className="icon" />
                     Verified
